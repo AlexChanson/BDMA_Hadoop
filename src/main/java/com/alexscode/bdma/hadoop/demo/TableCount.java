@@ -1,4 +1,4 @@
-package hello;
+package com.alexscode.bdma.hadoop.demo;
 
 public class TableCount {
     int size;

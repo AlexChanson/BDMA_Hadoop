@@ -1,4 +1,4 @@
-package hello;
+package com.alexscode.bdma.hadoop.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
