@@ -8,7 +8,19 @@
     <artifactId>hadoop</artifactId>
     <version>0.1.0</version>
 
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.5.RELEASE</version>
+    </parent>
+
     <packaging>jar</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <hbase.version>1.4.8</hbase.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -18,7 +30,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <scope>main</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -62,36 +74,32 @@
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-common</artifactId>
-            <version>1.4.1</version>
+            <version>${hbase.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
-            <version>1.4.1</version>
+            <version>${hbase.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-server</artifactId>
-            <version>1.4.1</version>
+            <version>${hbase.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-annotations</artifactId>
-            <version>1.4.1</version>
+            <version>${hbase.version}</version>
         </dependency>
 
 
     </dependencies>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
 
     <build>
