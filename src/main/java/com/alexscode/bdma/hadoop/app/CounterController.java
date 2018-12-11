@@ -21,20 +21,13 @@ import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Some example code on table manipulation
+ */
 @RestController
 public class CounterController {
 
 
-    @RequestMapping(value = "/aiwsbu/v1/students/{id}/transcripts/{year}", method = RequestMethod.GET)
-    public Object task1(@PathVariable("id") Long id, @PathVariable("year") int year) throws StudentNotFoundException{
-        HashMap<String, Object> test = new HashMap<>();
-        if (id != 42)
-            throw new StudentNotFoundException("no student " + id);
-        test.put("sucess", 1);
-        test.put("id", id);
-        test.put("year", year);
-        return test;
-    }
 
     @GetMapping("/hbase")
     public TableCount hbase() throws IOException {
