@@ -1,4 +1,4 @@
-package com.alexscode.bdma.hadoop.demo;
+package com.alexscode.bdma.hadoop.beans;
 
 public class TableCount {
     int size;

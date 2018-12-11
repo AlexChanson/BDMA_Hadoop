@@ -1,6 +1,6 @@
-package com.alexscode.bdma.hadoop.demo;
+package com.alexscode.bdma.hadoop.app;
 
-import com.alexscode.bdma.hadoop.beans.Releve;
+import com.alexscode.bdma.hadoop.beans.TableCount;
 import com.alexscode.bdma.hadoop.err.StudentNotFoundException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
