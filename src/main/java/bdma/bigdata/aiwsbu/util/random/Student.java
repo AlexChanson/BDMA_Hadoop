@@ -1,5 +1,7 @@
 package bdma.bigdata.aiwsbu.util.random;
 
+import java.util.Random;
+
 public class Student {
 
     private String rowKey = "";
@@ -39,11 +41,15 @@ public class Student {
 
     // TODO
     public String generateEmailAddress() {
-        return "";
+        return generateFirstName()+generateLastName()+"@etu.univ-tours.fr";
     }
 
     // TODO
     public String generatePhoneNumber() {
-        return "";
+        return "02"+String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))
+        +String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))+String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))
+        +String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))+String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))
+        +String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))+String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)))
+        +String.valueOf(0 + (int)(Math.random() * ((9 - 0) + 1)));
     }
 }
