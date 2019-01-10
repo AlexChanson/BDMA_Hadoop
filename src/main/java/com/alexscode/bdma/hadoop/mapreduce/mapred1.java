@@ -24,34 +24,45 @@ public class mapred1 {
         private static final IntWritable one = new IntWritable(1);
 
         public void map(ImmutableBytesWritable row, Result value, Context context) throws IOException, InterruptedException {
-            // this example is just copying the data from the source table...
-            context.write(row, one);
+            // get rowKey and convert it to string
+            String inKey = new String(row.get());
+            // set new key having only date
+            String oKey = inKey.split("/")[0];
+            // get sales column in byte format first and then convert it to
+            // string (as it is stored as string from hbase shell)
+            byte[] bnotes = value.getValue(Bytes.toBytes("cf1"), Bytes.toBytes("notes"));
+            String snotes = new String(bnotes);
+            Integer notes = new Integer(snotes);
+            // emit date and sales values
+            context.write(new ImmutableBytesWritable(oKey.getBytes()), new IntWritable(notes));
         }
 
-        private static Put resultToPut(ImmutableBytesWritable key, Result result) throws IOException {
-            Put put = new Put(key.get());
-            for ( Cell kv : result.listCells()) {
-                put.add(kv);
-            }
-            return put;
-        }
+
     }
 
     public static class Reducer1 extends TableReducer<ImmutableBytesWritable, IntWritable, ImmutableBytesWritable> {
 
         public void reduce(ImmutableBytesWritable key, Iterable<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
-            int sum = 0;
-            for (IntWritable val : values) {
-                sum += val.get();
-            }
 
-            Put put = new Put(key.get());
-            put.add(Bytes.toBytes("details"), Bytes.toBytes("total"), Bytes.toBytes(sum));
-            System.out.println(String.format("stats :   key : %d,  count : %d", Bytes.toInt(key.get()), sum));
-            context.write(key, put);
+
+                int sum = 0;
+                int compteur = 0;
+                // loop through different sales vales and add it to sum
+                for (IntWritable moyenne : values) {
+                    Integer intmoyenne = new Integer(moyenne.toString());
+                    sum += intmoyenne;
+                    compteur++;
+                }
+
+                // create hbase put with rowkey as date
+
+                Put insHBase = new Put(key.get());
+                // insert sum value to hbase
+                insHBase.add(Bytes.toBytes("cf1"), Bytes.toBytes("sum"), Bytes.toBytes(sum/compteur));
+                // write data to Hbase table
+                context.write(key, insHBase);
+
         }
     }
-
-
 }

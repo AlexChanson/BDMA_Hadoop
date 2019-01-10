@@ -29,8 +29,7 @@ public class MainMap {
                 job);
         TableMapReduceUtil.initTableReducerJob(
                 "21402752Q2",      // output table
-                null,             // reducer class
-                //Reducer1.class,
+                mapred1.Reducer1.class,  // reducer class
                 job);
         job.setNumReduceTasks(0);
 
