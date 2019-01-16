@@ -43,7 +43,7 @@ public class StudentController {
         }
     }
 
-    @RequestMapping(value = "/aiwsbu/v1/students/{id}/transcripts/{program}", method = RequestMethod.GET)
+    @RequestMapping(value = "/Aiwsbu/v1/students/{id}/transcripts/{program}", method = RequestMethod.GET)
     public Object task1(@PathVariable("id") String id, @PathVariable("program") String program) throws StudentNotFoundException {
 
         TableName studentsTableName = Namespace.getStudentTableName();
@@ -102,5 +102,21 @@ public class StudentController {
             throw new StudentNotFoundException("no student " + id);
         }
 
+    }
+
+    @RequestMapping(value = "/Aiwsbu/v1/rates/{semester}", method = RequestMethod.GET)
+    public Object task2(@PathVariable("semester") int semester){
+
+        try {
+            HTable resTable = new HTable(config, "21402752Q2".getBytes());
+
+            //TODO
+
+            List<HashMap<String, Object>> rates = new ArrayList<>();
+            return rates;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
