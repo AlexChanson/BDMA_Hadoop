@@ -97,7 +97,7 @@ public class StudentController {
                 System.out.printf("Found row : %s %s %s %s%n",semester, course, grade, year);
                 HashMap<String, Object> note = new HashMap<>();
                 note.put("Code", course);
-                note.put("Name", uemap.get(year+"/"+course));
+                note.put("Name", uemap.getOrDefault(course+"/"+year, "Unknown"));
                 note.put("Grade", grade/100);
                 if (semester.equals("01") || semester.equals("03") || semester.equals("05") || semester.equals("07") || semester.equals("09"))
                     semester1.add(note);
