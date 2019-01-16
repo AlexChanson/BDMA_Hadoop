@@ -26,7 +26,15 @@ import java.util.List;
 public class StudentController {
     Configuration config = HBaseConfiguration.create();
     Connection connection;
+    static HashMap<String, String> pmap = new HashMap();
 
+    static {
+        pmap.put("L1", "(01|02)");
+        pmap.put("L2", "(03|04)");
+        pmap.put("L3", "(05|06)");
+        pmap.put("M1", "(07|08)");
+        pmap.put("M2", "(09|10)");
+    }
     {
         try {
             connection = ConnectionFactory.createConnection(config);
@@ -35,8 +43,8 @@ public class StudentController {
         }
     }
 
-    @RequestMapping(value = "/aiwsbu/v1/students/{id}/transcripts/{year}", method = RequestMethod.GET)
-    public Object task1(@PathVariable("id") String id, @PathVariable("year") int year) throws StudentNotFoundException {
+    @RequestMapping(value = "/aiwsbu/v1/students/{id}/transcripts/{program}", method = RequestMethod.GET)
+    public Object task1(@PathVariable("id") String id, @PathVariable("program") String program) throws StudentNotFoundException {
 
         TableName studentsTableName = Namespace.getStudentTableName();
         try {
@@ -55,7 +63,7 @@ public class StudentController {
             gradeScan.addColumn("#".getBytes(), "G".getBytes());
 
             RowFilter gradeFilter = new RowFilter(CompareFilter.CompareOp.EQUAL,
-                    new RegexStringComparator(year + "\\/.."+id+"\\/......."));
+                    new RegexStringComparator("....\\/.."+id+"\\/."+pmap.get(program)+"...."));
 
             gradeScan.setFilter(gradeFilter);
 
@@ -69,11 +77,11 @@ public class StudentController {
                 String semester = key.substring(5,7);
                 String course = key.substring(18);
                 double grade = Double.parseDouble(new String(result.getValue("#".getBytes(), "G".getBytes())));
-                System.out.printf("Found row : %s %s %s",semester, course, grade);
+                System.out.printf("Found row : %s %s %s%n",semester, course, grade);
                 HashMap<String, Object> note = new HashMap<>();
                 note.put("Code", course);
-                note.put("Grade", grade);
-                if (semester.equals("01"))
+                note.put("Grade", grade/100);
+                if (semester.equals("01") || semester.equals("03") || semester.equals("05") || semester.equals("07") || semester.equals("09"))
                     semester1.add(note);
                 else
                     semester2.add(note);
