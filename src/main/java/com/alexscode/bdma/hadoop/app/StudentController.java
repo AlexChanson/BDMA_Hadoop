@@ -49,7 +49,7 @@ public class StudentController {
             for (Result result = scanner.next(); result != null; result = scanner.next()){
                 String key = Bytes.toString(result.getRow());
                 String name = new String(result.getValue("#".getBytes(), "N".getBytes()));
-                //System.out.println(key + "->" + name);
+                System.out.println(key + "->" + name);
                 uemap.put(key.split("/")[0] + "/" + (9999 - Integer.parseInt(key.split("/")[1])), name);
             }
         } catch (IOException e) {
@@ -93,7 +93,7 @@ public class StudentController {
                 String course = key.substring(18);
                 String year = key.substring(0,4);
                 double grade = Double.parseDouble(new String(result.getValue("#".getBytes(), "G".getBytes())));
-                //System.out.printf("Found row : %s %s %s %s%n",semester, course, grade, year);
+                System.out.printf("Found row : %s %s %s %s%n",semester, course, grade, year);
                 HashMap<String, Object> note = new HashMap<>();
                 note.put("Code", course);
                 note.put("Name", uemap.get(year+"/"+course));
