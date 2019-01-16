@@ -10,6 +10,7 @@ import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.FuzzyRowFilter;
 import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.naming.Name;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class StudentController {
@@ -58,15 +61,32 @@ public class StudentController {
 
             ResultScanner scanner = gradeTable.getScanner(gradeScan);
 
-            for (Result result = scanner.next(); result != null; result = scanner.next())
-                System.out.println("Found row : " + result);
+            List<HashMap<String, Object>> semester1 = new ArrayList<>();
+            List<HashMap<String, Object>> semester2 = new ArrayList<>();
+
+            for (Result result = scanner.next(); result != null; result = scanner.next()) {
+                String key = Bytes.toString(result.getRow());
+                String semester = key.substring(5,7);
+                String course = key.substring(18);
+                double grade = Double.parseDouble(new String(result.getValue("#".getBytes(), "G".getBytes())));
+                System.out.printf("Found row : %s %s %s",semester, course, grade);
+                HashMap<String, Object> note = new HashMap<>();
+                note.put("Code", course);
+                note.put("Grade", grade);
+                if (semester.equals("01"))
+                    semester1.add(note);
+                else
+                    semester2.add(note);
+            }
 
             scanner.close();
 
             HashMap<String, Object> student = new HashMap<>();
-            student.put("Name", new String(infoEtu.getValue("#".getBytes(), "P".getBytes())) + " " + new String(infoEtu.getValue("#".getBytes(), "F".getBytes())));
+            student.put("Name", new String(infoEtu.getValue("#".getBytes(), "F".getBytes())) + " " + new String(infoEtu.getValue("#".getBytes(), "L".getBytes())));
             student.put("Email", new String(infoEtu.getValue("C".getBytes(), "E".getBytes())));
             student.put("Program", new String(infoEtu.getValue("#".getBytes(), "P".getBytes())));
+            student.put("First", semester1);
+            student.put("Second", semester2);
 
 
             return student;
