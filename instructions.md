@@ -29,3 +29,7 @@ Maven has placed the compiled jar in the subdirectory `target` subdirectory, it 
 This will start the embedded Tomcat server on port _8090_
 
 ## Testing the API
+To test the API it is recommended to ruse the popular command line utility _curl_
+
+### Question 1
+Running `curl http://localhost:8090/Aiwsbu/v1/students/2001000814/transcripts/L1` on the test server yields the following result:  
