@@ -63,7 +63,7 @@ public class StudentController {
             gradeScan.addColumn("#".getBytes(), "G".getBytes());
 
             RowFilter gradeFilter = new RowFilter(CompareFilter.CompareOp.EQUAL,
-                    new RegexStringComparator("....\\/.."+id+"\\/."+pmap.get(program)+"...."));
+                    new RegexStringComparator("....\\/"+pmap.get(program)+id+"\\/......."));
 
             gradeScan.setFilter(gradeFilter);
 
