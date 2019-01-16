@@ -27,6 +27,7 @@ public class StudentController {
     Configuration config = HBaseConfiguration.create();
     Connection connection;
     static HashMap<String, String> pmap = new HashMap();
+    HashMap<String, String> uemap = new HashMap<>();
 
     static {
         pmap.put("L1", "(01|02)");
@@ -35,9 +36,21 @@ public class StudentController {
         pmap.put("M1", "(07|08)");
         pmap.put("M2", "(09|10)");
     }
+
     {
         try {
             connection = ConnectionFactory.createConnection(config);
+
+            //Fetch UE names
+            HTable ueTable = new HTable(config, Namespace.getCourseTableName());
+            Scan ueScan = new Scan();
+            ueScan.addColumn("#".getBytes(), "N".getBytes());
+            ResultScanner scanner = ueTable.getScanner(ueScan);
+            for (Result result = scanner.next(); result != null; result = scanner.next()){
+                String key = Bytes.toString(result.getRow());
+                String name = new String(result.getValue("#".getBytes(), "N".getBytes()));
+                uemap.put(key, name);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,6 +61,7 @@ public class StudentController {
 
         TableName studentsTableName = Namespace.getStudentTableName();
         try {
+            //Fetch info on student
             HTable studentTable = new HTable(config, studentsTableName);
 
             Get getStudent = new Get(id.getBytes());
@@ -76,10 +90,12 @@ public class StudentController {
                 String key = Bytes.toString(result.getRow());
                 String semester = key.substring(5,7);
                 String course = key.substring(18);
+                String year = key.substring(0,4);
                 double grade = Double.parseDouble(new String(result.getValue("#".getBytes(), "G".getBytes())));
                 System.out.printf("Found row : %s %s %s%n",semester, course, grade);
                 HashMap<String, Object> note = new HashMap<>();
                 note.put("Code", course);
+                note.put("Name", uemap.get(year+"/"+course));
                 note.put("Grade", grade/100);
                 if (semester.equals("01") || semester.equals("03") || semester.equals("05") || semester.equals("07") || semester.equals("09"))
                     semester1.add(note);
@@ -109,10 +125,10 @@ public class StudentController {
 
         try {
             HTable resTable = new HTable(config, "21402752Q2".getBytes());
+            List<HashMap<String, Object>> rates = new ArrayList<>();
 
             //TODO
 
-            List<HashMap<String, Object>> rates = new ArrayList<>();
             return rates;
         } catch (IOException e) {
             e.printStackTrace();
