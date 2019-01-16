@@ -48,9 +48,10 @@ public class StudentController {
             ResultScanner scanner = ueTable.getScanner(ueScan);
             for (Result result = scanner.next(); result != null; result = scanner.next()){
                 String key = Bytes.toString(result.getRow());
+                String cleanKey = key.split("/")[0] + "/" + (9999 - Integer.parseInt(key.split("/")[1]));
                 String name = new String(result.getValue("#".getBytes(), "N".getBytes()));
-                System.out.println(key + "->" + name);
-                uemap.put(key.split("/")[0] + "/" + (9999 - Integer.parseInt(key.split("/")[1])), name);
+                System.out.println(cleanKey + "->" + name);
+                uemap.put(cleanKey, name);
             }
         } catch (IOException e) {
             e.printStackTrace();
