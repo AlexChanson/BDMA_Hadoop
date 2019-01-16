@@ -64,7 +64,9 @@ public class StudentController {
             scanner.close();
 
             HashMap<String, Object> student = new HashMap<>();
-            student.put("Name", infoEtu.getValue("#".getBytes(), "P".getBytes()) + " " + infoEtu.getValue("#".getBytes(), "F".getBytes()));
+            student.put("Name", new String(infoEtu.getValue("#".getBytes(), "P".getBytes())) + " " + new String(infoEtu.getValue("#".getBytes(), "F".getBytes())));
+            student.put("Email", new String(infoEtu.getValue("C".getBytes(), "E".getBytes())));
+            student.put("Program", new String(infoEtu.getValue("#".getBytes(), "P".getBytes())));
 
 
             return student;
