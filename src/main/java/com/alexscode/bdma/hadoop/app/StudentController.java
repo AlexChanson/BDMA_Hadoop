@@ -115,6 +115,7 @@ public class StudentController {
 
             return student;
         } catch (IOException e) {
+            e.printStackTrace();
             throw new StudentNotFoundException("no student " + id);
         }
 
