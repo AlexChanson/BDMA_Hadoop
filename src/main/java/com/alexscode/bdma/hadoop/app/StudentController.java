@@ -124,7 +124,9 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/rates/{semester}", method = RequestMethod.GET)
-    public Object task2(@PathVariable("semester") int semester){
+    public Object task2(@PathVariable("semester") int semester) throws StudentNotFoundException{
+        if (semester > 10)
+            throw new StudentNotFoundException("coucou");
 
         try {
             HTable resTable = new HTable(config, "21402752Q2".getBytes());
