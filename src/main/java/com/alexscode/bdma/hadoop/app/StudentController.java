@@ -200,10 +200,12 @@ public class StudentController {
             Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
             getTop.addFamily("#".getBytes());
             Result res = resTable.get(getTop);
+            System.out.printf("[DEBUG] Prgogram = '%s' Year= '%s'%n", program, year);
             for (Cell cell : res.rawCells()){
                 byte[] family = CellUtil.cloneFamily(cell);
                 byte[] value = CellUtil.cloneValue(cell);
                 byte[] column = CellUtil.cloneQualifier(cell);
+                System.out.printf("[DEBUG] %s:%s -> %s%n",new String(family), new String(column), new String(value));
                 if (Arrays.equals(family, "G".getBytes())){
                     HashMap<String, Object> tmp = new HashMap<>();
                     String[] ids = (new String(column)).split("/");
