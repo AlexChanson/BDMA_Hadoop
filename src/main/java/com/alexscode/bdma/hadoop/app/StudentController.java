@@ -26,7 +26,7 @@ import java.util.*;
 public class StudentController {
     Configuration config = HBaseConfiguration.create();
     Connection connection;
-    static HashMap<String, String> pmap = new HashMap();
+    static HashMap<String, String> pmap = new HashMap(), q5map = new HashMap<>();
     HashMap<String, String> uemap = new HashMap<>();
 
     static {
@@ -35,6 +35,12 @@ public class StudentController {
         pmap.put("L3", "(05|06)");
         pmap.put("M1", "(07|08)");
         pmap.put("M2", "(09|10)");
+
+        q5map.put("L1","0");
+        q5map.put("L2","1");
+        q5map.put("L3","2");
+        q5map.put("M1","3");
+        q5map.put("M2","4");
     }
 
     {
@@ -188,7 +194,28 @@ public class StudentController {
 
     @RequestMapping(value = "/Aiwsbu/v1/programs/{program}/means/{year}", method = RequestMethod.GET)
     public Object task5(@PathVariable("program") String program, @PathVariable("year") int year){
-        //TODO
+        try {
+            HTable resTable = new HTable(config, "21402752Q5".getBytes());
+            HashMap<String, Object> out = new HashMap<>();
+            Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
+            getTop.addFamily("#".getBytes());
+            Result res = resTable.get(getTop);
+            for (Cell cell : res.rawCells()){
+                byte[] family = CellUtil.cloneFamily(cell);
+                byte[] value = CellUtil.cloneValue(cell);
+                byte[] column = CellUtil.cloneQualifier(cell);
+                if (Arrays.equals(family, "G".getBytes())){
+                    HashMap<String, Object> tmp = new HashMap<>();
+                    String[] ids = (new String(column)).split("/");
+                    tmp.put("Name", ids[1]);
+                    tmp.put("Grade", Double.parseDouble(new String(value)));
+                    out.put(ids[0], tmp);
+                }
+            }
+            return out;
+        }catch (IOException ignored){
+
+        }
         return null;
     }
 
