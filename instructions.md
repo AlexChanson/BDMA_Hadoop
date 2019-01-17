@@ -8,6 +8,11 @@ The version control system Git must be installed on the system, if not run:
 The project build system Maven must be installed on the system, if not run:  
 ``sudo apt install maven``
 
+## Downloading the JAR
+The build process might be slow especially on the virtual machine, if you do not wish to build the two JAR files required to run our project you can simply download the latest versions here:  
+[Map Reduce jobs]()  
+[REST API]()  
+You can skip "Building" steps.
 ## Building the API
 First setup the project directory run:  
 ``git clone https://github.com/AlexChanson/BDMA_Hadoop``  

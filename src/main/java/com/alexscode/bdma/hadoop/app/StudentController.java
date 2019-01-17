@@ -4,6 +4,7 @@ import bdma.bigdata.aiwsbu.Namespace;
 import com.alexscode.bdma.hadoop.err.Custom500Exception;
 import com.alexscode.bdma.hadoop.err.CustomNotFoundException;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
@@ -11,16 +12,14 @@ import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.hbase.util.Pair;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class StudentController {
@@ -199,8 +198,34 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/ranks/{program}/years/{year}", method = RequestMethod.GET)
-    public Object task7(@PathVariable("program") String program, @PathVariable("year") int year){
-        //TODO
-        return null;
+    public String task7(@PathVariable("program") String program, @PathVariable("year") int year) throws Custom500Exception{
+        try {
+            HTable resTable = new HTable(config, "21402752Q7".getBytes());
+            List<Pair<String, Double>> grades = new ArrayList<>();
+            Get getTop = new Get((year+"/"+program).getBytes());
+            getTop.addColumn("#".getBytes(), "G".getBytes());
+            Result top = resTable.get(getTop);
+            for (Cell cell : top.rawCells()){
+                 //TODO
+            }
+            return getWeirdOrderedJson(grades);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Custom500Exception("Unspecified I/O error");
+        }
+
     }
+
+    public static String getWeirdOrderedJson(List<Pair<String, Double>> grades){
+        StringBuilder out = new StringBuilder("{");
+        Collections.sort(grades, Comparator.comparing(Pair::getSecond));
+        for (int i = 0; i < grades.size(); i++) {
+            out.append("\"").append(grades.get(i).getFirst()).append("\":").append(grades.get(i).getSecond());
+            if (i < grades.size() - 1)
+                out.append(",");
+        }
+        out.append("}");
+        return out.toString();
+    }
+
 }
