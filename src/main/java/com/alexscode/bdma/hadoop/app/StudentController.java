@@ -1,6 +1,7 @@
 package com.alexscode.bdma.hadoop.app;
 
 import bdma.bigdata.aiwsbu.Namespace;
+import com.alexscode.bdma.hadoop.err.Custom500Exception;
 import com.alexscode.bdma.hadoop.err.CustomNotFoundException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -57,7 +58,7 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/students/{id}/transcripts/{program}", method = RequestMethod.GET)
-    public Object task1(@PathVariable("id") String id, @PathVariable("program") String program) throws CustomNotFoundException {
+    public Object task1(@PathVariable("id") String id, @PathVariable("program") String program) throws CustomNotFoundException, Custom500Exception {
 
         TableName studentsTableName = Namespace.getStudentTableName();
         try {
@@ -116,6 +117,8 @@ public class StudentController {
             return student;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new Custom500Exception("Unspecified I/O error");
+        } catch (NullPointerException ignored){
             throw new CustomNotFoundException("No student " + id + " was found !");
         }
 
