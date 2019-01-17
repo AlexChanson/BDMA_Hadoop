@@ -156,7 +156,7 @@ public class StudentController {
             List<HashMap<String, Object>> rates = new ArrayList<>();
             Scan resultScan = new Scan();
             resultScan.addColumn("#".getBytes(), "S".getBytes());
-            RowFilter resultFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, new RegexStringComparator("*/"+courseId));
+            RowFilter resultFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, new RegexStringComparator(".*/"+courseId));
             resultScan.setFilter(resultFilter);
             ResultScanner scanner = resTable.getScanner(resultScan);
             for (Result result = scanner.next(); result != null; result = scanner.next()){
