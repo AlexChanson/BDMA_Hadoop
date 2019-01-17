@@ -129,8 +129,19 @@ public class StudentController {
         try {
             HTable resTable = new HTable(config, "21402752Q2".getBytes());
             List<HashMap<String, Object>> rates = new ArrayList<>();
-
-            //TODO
+            Scan resultScan = new Scan();
+            resultScan.addColumn("#".getBytes(), "S".getBytes());
+            String sem = semester > 9 ? String.valueOf(semester) : "0" + semester;
+            RowFilter resultFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, new RegexStringComparator(sem + "/...."));
+            resultScan.setFilter(resultFilter);
+            ResultScanner scanner = resTable.getScanner(resultScan);
+            for (Result result = scanner.next(); result != null; result = scanner.next()){
+                String key = Bytes.toString(result.getRow());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("Year", Integer.parseInt(key.split("/")[1]));
+                map.put("Rate", Double.parseDouble(new String(result.getValue("#".getBytes(), "S".getBytes()))));
+                rates.add(map);
+            }
 
             return rates;
         } catch (IOException e) {
