@@ -1,13 +1,12 @@
 package com.alexscode.bdma.hadoop.app;
 
 import bdma.bigdata.aiwsbu.Namespace;
-import com.alexscode.bdma.hadoop.err.StudentNotFoundException;
+import com.alexscode.bdma.hadoop.err.CustomNotFoundException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.CompareFilter;
-import org.apache.hadoop.hbase.filter.FuzzyRowFilter;
 import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.naming.Name;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +57,7 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/students/{id}/transcripts/{program}", method = RequestMethod.GET)
-    public Object task1(@PathVariable("id") String id, @PathVariable("program") String program) throws StudentNotFoundException {
+    public Object task1(@PathVariable("id") String id, @PathVariable("program") String program) throws CustomNotFoundException {
 
         TableName studentsTableName = Namespace.getStudentTableName();
         try {
@@ -118,16 +116,13 @@ public class StudentController {
             return student;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new StudentNotFoundException("no student " + id);
+            throw new CustomNotFoundException("No student " + id + " was found !");
         }
 
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/rates/{semester}", method = RequestMethod.GET)
-    public Object task2(@PathVariable("semester") int semester) throws StudentNotFoundException{
-        if (semester > 10)
-            throw new StudentNotFoundException("coucou");
-
+    public Object task2(@PathVariable("semester") int semester) throws CustomNotFoundException {
         try {
             HTable resTable = new HTable(config, "21402752Q2".getBytes());
             List<HashMap<String, Object>> rates = new ArrayList<>();
@@ -144,8 +139,37 @@ public class StudentController {
                 map.put("Rate", Double.parseDouble(new String(result.getValue("#".getBytes(), "S".getBytes()))));
                 rates.add(map);
             }
+            if (rates.size() == 0)
+                throw new CustomNotFoundException("Error 404 was caused by semester " + semester + " not existent in the database !");
+            else
+                return rates;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-            return rates;
+    @RequestMapping(value = "/Aiwsbu/v1/courses/{id}/rates", method = RequestMethod.GET)
+    public Object task3(@PathVariable("id") String courseId) throws CustomNotFoundException{
+        try {
+            HTable resTable = new HTable(config, "21402752Q3".getBytes());
+            List<HashMap<String, Object>> rates = new ArrayList<>();
+            Scan resultScan = new Scan();
+            resultScan.addColumn("#".getBytes(), "S".getBytes());
+            RowFilter resultFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, new RegexStringComparator("*/"+courseId));
+            resultScan.setFilter(resultFilter);
+            ResultScanner scanner = resTable.getScanner(resultScan);
+            for (Result result = scanner.next(); result != null; result = scanner.next()){
+                String key = Bytes.toString(result.getRow());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("Name", key.split("/")[0]);
+                map.put("Rate", Double.parseDouble(new String(result.getValue("#".getBytes(), "G".getBytes()))));
+                rates.add(map);
+            }
+            if (rates.size() == 0)
+                throw new CustomNotFoundException("Error 404 was caused by course " + courseId + " not existent in the database !");
+            else
+                return rates;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

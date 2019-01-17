@@ -11,10 +11,10 @@ import java.util.HashMap;
 
 @ControllerAdvice
 public class StudentNotFoundAdvice extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(StudentNotFoundException.class)
+    @ExceptionHandler(CustomNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final Object handleUserNotFoundException(StudentNotFoundException ex, WebRequest request) {
+    public final Object handleUserNotFoundException(CustomNotFoundException ex, WebRequest request) {
         HashMap<String, Object> error = new HashMap<>();
         error.put("message", ex.getMessage());
         error.put("timestamp", new Date());

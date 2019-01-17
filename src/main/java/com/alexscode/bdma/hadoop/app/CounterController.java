@@ -1,7 +1,6 @@
 package com.alexscode.bdma.hadoop.app;
 
 import com.alexscode.bdma.hadoop.beans.TableCount;
-import com.alexscode.bdma.hadoop.err.StudentNotFoundException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
@@ -17,7 +16,6 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.*;
 
