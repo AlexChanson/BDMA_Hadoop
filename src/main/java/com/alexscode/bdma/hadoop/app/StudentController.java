@@ -5,6 +5,7 @@ import com.alexscode.bdma.hadoop.err.Custom500Exception;
 import com.alexscode.bdma.hadoop.err.CustomNotFoundException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
@@ -206,7 +207,12 @@ public class StudentController {
             getTop.addColumn("#".getBytes(), "G".getBytes());
             Result top = resTable.get(getTop);
             for (Cell cell : top.rawCells()){
-                 //TODO
+                byte[] family = CellUtil.cloneFamily(cell);
+                byte[] value = CellUtil.cloneValue(cell);
+                if (Arrays.equals(family, "G".getBytes())){
+                    String[] vals = (new String(value)).split("/");
+                    grades.add(new Pair<>(vals[0], Double.parseDouble(vals[1])));
+                }
             }
             return getWeirdOrderedJson(grades);
         } catch (IOException e) {
