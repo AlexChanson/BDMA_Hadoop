@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -177,5 +178,29 @@ public class StudentController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @RequestMapping(value = "/Aiwsbu/v1/courses/{id}/rates/{year}", method = RequestMethod.GET)
+    public Object task4(@PathVariable("id") String courseID, @PathVariable("year") int year){
+        //TODO
+        return null;
+    }
+
+    @RequestMapping(value = "/Aiwsbu/v1/programs/{program}/means/{year}", method = RequestMethod.GET)
+    public Object task5(@PathVariable("program") String program, @PathVariable("year") int year){
+        //TODO
+        return null;
+    }
+
+    @RequestMapping(value = "/Aiwsbu/v1/instructors/{name}/rates", method = RequestMethod.GET)
+    public Object task6(@PathVariable("name") String name){
+        //TODO
+        return null;
+    }
+
+    @RequestMapping(value = "/Aiwsbu/v1/ranks/{program}/years/{year}", method = RequestMethod.GET)
+    public Object task7(@PathVariable("program") String program, @PathVariable("year") int year){
+        //TODO
+        return null;
     }
 }
