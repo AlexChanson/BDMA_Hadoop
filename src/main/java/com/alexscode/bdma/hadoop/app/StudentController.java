@@ -206,13 +206,13 @@ public class StudentController {
                 byte[] value = CellUtil.cloneValue(cell);
                 byte[] column = CellUtil.cloneQualifier(cell);
                 System.out.printf("[DEBUG] %s:%s -> %s%n",new String(family), new String(column), new String(value));
-                if (Arrays.equals(family, "G".getBytes())){
-                    HashMap<String, Object> tmp = new HashMap<>();
-                    String[] ids = (new String(column)).split("/");
-                    tmp.put("Name", ids[1]);
-                    tmp.put("Grade", Double.parseDouble(new String(value)));
-                    out.put(ids[0], tmp);
-                }
+
+                HashMap<String, Object> tmp = new HashMap<>();
+                String[] ids = (new String(column)).split("/");
+                tmp.put("Name", ids[1]);
+                tmp.put("Grade", Double.parseDouble(new String(value)));
+                out.put(ids[0], tmp);
+
             }
             return out;
         }catch (IOException ignored){
