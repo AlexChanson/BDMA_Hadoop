@@ -200,7 +200,7 @@ public class StudentController {
             Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
             getTop.addFamily("#".getBytes());
             Result res = resTable.get(getTop);
-            System.out.printf("[DEBUG] Prgogram = '%s' Year= '%s'%n", program, year);
+            System.out.printf("[DEBUG] Prgogram = '%s' Year= '%s' Key used = '%s'%n", program, year, (q5map.get(program)+"/"+year));
             for (Cell cell : res.rawCells()){
                 byte[] family = CellUtil.cloneFamily(cell);
                 byte[] value = CellUtil.cloneValue(cell);
