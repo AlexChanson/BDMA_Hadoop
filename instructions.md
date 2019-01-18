@@ -14,6 +14,17 @@ The build process might be slow especially on the virtual machine, if you do not
 [REST API]()  
 You can skip "Building" steps.  
 We also provide an API endpoint at home.alexc.ovh port 80.
+## Building the MapReduce Jobs
+The first step if not downloading the jar files is to build the Map Reduce jobs, this is done fully automatically using the Maven build system.  
+First setup the project using git:  
+`git clone https://github.com/xairon/MapReduce_jobs`  
+The move to the directory  
+`cd MapReduce_jobs`  
+Finally run maven to assemble the jar  
+`mvn package`
+## Running the MapReduce Jobs
+Once built the MapReduce jobs can now be run, this is done using the following command:  
+```java -cp path/to/jar:`hbase classpath` mapreduce.Main```
 ## Building the API
 First setup the project directory run:  
 ``git clone https://github.com/AlexChanson/BDMA_Hadoop``  
