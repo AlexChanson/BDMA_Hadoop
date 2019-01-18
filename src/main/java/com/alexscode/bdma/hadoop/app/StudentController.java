@@ -200,12 +200,12 @@ public class StudentController {
             Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
             getTop.addFamily("#".getBytes());
             Result res = resTable.get(getTop);
-            System.out.printf("[DEBUG] Prgogram = '%s' Year= '%s' Key used = '%s'%n", program, year, (q5map.get(program)+"/"+year));
+            //System.out.printf("[DEBUG] Prgogram = '%s' Year= '%s' Key used = '%s'%n", program, year, (q5map.get(program)+"/"+year));
             for (Cell cell : res.rawCells()){
                 byte[] family = CellUtil.cloneFamily(cell);
                 byte[] value = CellUtil.cloneValue(cell);
                 byte[] column = CellUtil.cloneQualifier(cell);
-                System.out.printf("[DEBUG] %s:%s -> %s%n",new String(family), new String(column), new String(value));
+                //System.out.printf("[DEBUG] %s:%s -> %s%n",new String(family), new String(column), new String(value));
 
                 HashMap<String, Object> tmp = new HashMap<>();
                 String[] ids = (new String(column)).split("/");
@@ -238,10 +238,10 @@ public class StudentController {
             for (Cell cell : top.rawCells()){
                 byte[] family = CellUtil.cloneFamily(cell);
                 byte[] value = CellUtil.cloneValue(cell);
-                if (Arrays.equals(family, "G".getBytes())){
+                //if (Arrays.equals(family, "G".getBytes())){
                     String[] vals = (new String(value)).split("/");
                     grades.add(new Pair<>(vals[0], Double.parseDouble(vals[1])));
-                }
+                //}
             }
             return getWeirdOrderedJson(grades);
         } catch (IOException e) {
