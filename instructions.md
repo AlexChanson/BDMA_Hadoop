@@ -83,3 +83,6 @@ Running `` on our server yields the following results:
 ```json
 
 ```
+
+### Note on errors
+The server will serve the HTTP codes 404 and 500 for wrong id lookup and internal error, we took liberty to include custom error messages in addition to the HTTP error. This seems to be a common practice in public APIs ([example](https://developer.spotify.com/documentation/web-api/))
