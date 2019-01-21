@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.IntStream;
 
 @RestController
 public class StudentController {
@@ -41,6 +42,8 @@ public class StudentController {
         q5map.put("L3","2");
         q5map.put("M1","3");
         q5map.put("M2","4");
+        //identity just in case
+        IntStream.range(0,5).forEach(i -> q5map.put(String.valueOf(i), String.valueOf(i)));
     }
 
     {
@@ -187,7 +190,7 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/courses/{id}/rates/{year}", method = RequestMethod.GET)
-    public Object task4(@PathVariable("id") String courseID, @PathVariable("year") int year){
+    public Object task4(@PathVariable("id") String courseID, @PathVariable("year") int year) throws CustomNotFoundException{
         try {
             HTable resTable = new HTable(config, "21402752Q4".getBytes());
             HashMap<String, Object> out = new HashMap<>();
@@ -200,14 +203,18 @@ public class StudentController {
             return out;
         } catch (IOException ignored){
             return null;
+        } catch (NullPointerException ignored){
+            throw new CustomNotFoundException("No data for course " + courseID + " and year " + year);
         }
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/programs/{program}/means/{year}", method = RequestMethod.GET)
-    public Object task5(@PathVariable("program") String program, @PathVariable("year") int year){
+    public Object task5(@PathVariable("program") String program, @PathVariable("year") int year) throws CustomNotFoundException{
         try {
             HTable resTable = new HTable(config, "21402752Q5".getBytes());
             HashMap<String, Object> out = new HashMap<>();
+            if (q5map.get(program) == null)
+                throw new CustomNotFoundException("No program named '" + program + "' try with L1, L2, L3, M1 or M2.");
             Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
             getTop.addFamily("#".getBytes());
             Result res = resTable.get(getTop);
@@ -225,7 +232,10 @@ public class StudentController {
                 out.put(ids[0], tmp);
 
             }
-            return out;
+            if (out.size() > 0)
+                return out;
+            else
+                throw new CustomNotFoundException("No data found in the database for " + year + " and program " + program);
         }catch (IOException ignored){
 
         }
@@ -239,15 +249,15 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/ranks/{program}/years/{year}", method = RequestMethod.GET)
-    public String task7(@PathVariable("program") String program, @PathVariable("year") int year) throws Custom500Exception{
+    public String task7(@PathVariable("program") String program, @PathVariable("year") int year) throws Custom500Exception, CustomNotFoundException{
         try {
             HTable resTable = new HTable(config, "21402752Q7".getBytes());
             List<Pair<String, Double>> grades = new ArrayList<>();
-            Get getTop = new Get((year+"/"+program).getBytes());
-            getTop.addColumn("#".getBytes(), "G".getBytes());
+            Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
+            getTop.addFamily("#".getBytes());
             Result top = resTable.get(getTop);
             for (Cell cell : top.rawCells()){
-                byte[] family = CellUtil.cloneFamily(cell);
+                byte[] column = CellUtil.cloneQualifier(cell);
                 byte[] value = CellUtil.cloneValue(cell);
                 //if (Arrays.equals(family, "G".getBytes())){
                     String[] vals = (new String(value)).split("/");
