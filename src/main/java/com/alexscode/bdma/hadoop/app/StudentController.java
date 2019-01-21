@@ -251,6 +251,8 @@ public class StudentController {
     @RequestMapping(value = "/Aiwsbu/v1/ranks/{program}/years/{year}", method = RequestMethod.GET)
     public String task7(@PathVariable("program") String program, @PathVariable("year") int year) throws Custom500Exception, CustomNotFoundException{
         try {
+            if (q5map.get(program) == null)
+                throw new CustomNotFoundException("No program named '" + program + "' try with L1, L2, L3, M1 or M2.");
             HTable resTable = new HTable(config, "21402752Q7".getBytes());
             List<Pair<String, Double>> grades = new ArrayList<>();
             Get getTop = new Get((q5map.get(program)+"/"+year).getBytes());
@@ -264,7 +266,11 @@ public class StudentController {
                     grades.add(new Pair<>(vals[0], Double.parseDouble(vals[1])));
                 //}
             }
-            return getWeirdOrderedJson(grades);
+            if (grades.size() > 0)
+                return getWeirdOrderedJson(grades);
+            else
+                throw new CustomNotFoundException("No data found in the database for " + year + " and program " + program);
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new Custom500Exception("Unspecified I/O error");
@@ -275,6 +281,7 @@ public class StudentController {
     public static String getWeirdOrderedJson(List<Pair<String, Double>> grades){
         StringBuilder out = new StringBuilder("{");
         Collections.sort(grades, Comparator.comparing(Pair::getSecond));
+        Collections.reverse(grades);
         for (int i = 0; i < grades.size(); i++) {
             out.append("\"").append(grades.get(i).getFirst()).append("\":").append(grades.get(i).getSecond());
             if (i < grades.size() - 1)
