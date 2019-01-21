@@ -199,7 +199,7 @@ public class StudentController {
             out.put("Rate", Double.parseDouble(results[1]));
             return out;
         } catch (IOException ignored){
-
+            return null;
         }
     }
 
