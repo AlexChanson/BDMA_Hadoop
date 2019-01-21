@@ -188,8 +188,19 @@ public class StudentController {
 
     @RequestMapping(value = "/Aiwsbu/v1/courses/{id}/rates/{year}", method = RequestMethod.GET)
     public Object task4(@PathVariable("id") String courseID, @PathVariable("year") int year){
-        //TODO
-        return null;
+        try {
+            HTable resTable = new HTable(config, "21402752Q4".getBytes());
+            HashMap<String, Object> out = new HashMap<>();
+            Get getTop = new Get( (year + "/" + courseID).getBytes());
+            getTop.addFamily("#".getBytes());
+            Result res = resTable.get(getTop);
+            String[] results = (new String(res.getValue("#".getBytes(), "R".getBytes()))).split("/");
+            out.put("Name", results[0]);
+            out.put("Rate", Double.parseDouble(results[1]));
+            return out;
+        } catch (IOException ignored){
+
+        }
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/programs/{program}/means/{year}", method = RequestMethod.GET)
