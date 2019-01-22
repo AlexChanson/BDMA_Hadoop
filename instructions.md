@@ -10,8 +10,7 @@ The project build system Maven must be installed on the system, if not run:
 
 ## Downloading the JAR
 The build process might be slow especially on the virtual machine, if you do not wish to build the two JAR files required to run our project you can simply download the latest versions here:  
-[Map Reduce jobs]()  
-[REST API]()  
+[Google Drive](https://drive.google.com/drive/folders/1l_cqZwG2aIDWK0hI2YGBmB4fuOhaUJwC?usp=sharing) 
 You can skip "Building" steps.  
 We also provide an API endpoint at home.alexc.ovh port 80.
 ## Building the MapReduce Jobs
