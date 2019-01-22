@@ -10,7 +10,7 @@ The project build system Maven must be installed on the system, if not run:
 
 ## Downloading the JAR
 The build process might be slow especially on the virtual machine, if you do not wish to build the two JAR files required to run our project you can simply download the latest versions here:  
-[Google Drive](https://drive.google.com/drive/folders/1l_cqZwG2aIDWK0hI2YGBmB4fuOhaUJwC?usp=sharing) 
+[Google Drive](https://drive.google.com/drive/folders/1l_cqZwG2aIDWK0hI2YGBmB4fuOhaUJwC?usp=sharing)   
 You can skip "Building" steps.  
 We also provide an API endpoint at home.alexc.ovh port 80.
 ## Building the MapReduce Jobs
@@ -87,4 +87,8 @@ Running `curl http://localhost:8090/Aiwsbu/v1/ranks/L3/years/2007` on our server
 ```
 
 ### Note on errors
-The server will serve the HTTP codes 404 and 500 for wrong id lookup and internal error, we took liberty to include custom error messages in addition to the HTTP error. This seems to be a common practice in public APIs ([example](https://developer.spotify.com/documentation/web-api/))
+The server will serve the HTTP codes 404 and 500 for wrong id lookup and internal error, we took liberty to include custom error messages in addition to the HTTP error. This seems to be a common practice in public APIs ([example](https://developer.spotify.com/documentation/web-api/))  
+Typical error:  
+```json
+{"code":"404","Message":"No data found in the database for teacher named 'Dominique Li' !","Timestamp":"2019-01-22T20:21:32.829+0000","status":"NOT FOUND"}
+```
