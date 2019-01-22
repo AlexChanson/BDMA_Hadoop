@@ -243,9 +243,32 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/instructors/{name}/rates", method = RequestMethod.GET)
-    public Object task6(@PathVariable("name") String name){
-        //TODO
-        return null;
+    public Object task6(@PathVariable("name") String name) throws CustomNotFoundException, Custom500Exception{
+
+        try {
+            HTable resTable = new HTable(config, "21402752Q6".getBytes());
+            HashMap<String, Object> out = new HashMap<>();
+            Get getTop = new Get(name.getBytes());
+            getTop.addFamily("#".getBytes());
+            Result res = resTable.get(getTop);
+            for (Cell cell : res.rawCells()) {
+                byte[] value = CellUtil.cloneValue(cell);
+                byte[] column = CellUtil.cloneQualifier(cell);
+                double rate = Double.parseDouble(new String(value));
+                String[] keys = (new String(column)).split("/");
+                HashMap<String, Object> instance = new HashMap<>();
+                instance.put("Rate", rate);
+                instance.put("Name", keys[2]);
+                out.put(keys[0] + "/" + keys[1], instance);
+            }
+            if (out.size() > 0)
+                return out;
+            else
+                throw new CustomNotFoundException("No data found in the database for teacher named '" + name  + "' !");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Custom500Exception("Unspecified I/O error");
+        }
     }
 
     @RequestMapping(value = "/Aiwsbu/v1/ranks/{program}/years/{year}", method = RequestMethod.GET)

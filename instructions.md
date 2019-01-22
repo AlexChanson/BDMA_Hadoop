@@ -59,27 +59,32 @@ Running `curl http://localhost:8090/Aiwsbu/v1/rates/01` on our server yields the
 [{"Year":2002,"Rate":0.465},{"Year":2003,"Rate":0.48},{"Year":2004,"Rate":0.496},{"Year":2005,"Rate":0.514},{"Year":2006,"Rate":0.521},{"Year":2007,"Rate":0.505},{"Year":2008,"Rate":0.461},{"Year":2009,"Rate":0.495},{"Year":2010,"Rate":0.475},{"Year":2011,"Rate":0.497},{"Year":2012,"Rate":0.511},{"Year":2013,"Rate":0.479},{"Year":2014,"Rate":0.489},{"Year":2015,"Rate":0.487},{"Year":2016,"Rate":0.492},{"Year":2017,"Rate":0.503},{"Year":2018,"Rate":0.508},{"Year":2019,"Rate":0.491}]
 ```
 ### Question 3
-Running `` on our server yields the following results:  
+Running `curl http://localhost:8090/Aiwsbu/v1/courses/S01A006/rates` on our server yields the following results:  
 ```json
-
+[{"Rate":0.52,"Name":"Mgcock P Wwisiegvoqjsu"}]
 ```
 ### Question 4
-Running `` on our server yields the following results:  
+Running `curl http://localhost:8090/Aiwsbu/v1/courses/S10A009/rates/2017` on our server yields the following results:  
 ```json
-
+{"Rate":0.5263157894736842,"Name":"Ij Ttmplmxuf"}
 ```
 ### Question 5
-Running `` on our server yields the following results:  
+Running `curl http://localhost:8090/Aiwsbu/v1/programs/M2/means/2025` on our server yields the following results:  
 ```json
-
+{"S07B031":{"Grade":10.669473684210525,"Name":"Uogguqev Ilrrxh"},"S07B036":{"Grade":11.688888888888888,"Name":"Jhkhv Trrwlmok"},"S07B035":{"Grade":10.955714285714288,"Name":"Wgaok Ielexhwxwg Focy"},"S07B034":{"Grade":10.003333333333332,"Name":"Hp Pgtedxwwmgoasq Voyjixtmc"},
 ```
+...
+```json
+"S05B015":{"Grade":10.09076923076923,"Name":"Mtxvfjmr"},"S05B014":{"Grade":11.67,"Name":"Xywd Xccfcudhpyhj Gsdltwqfvh"},"S05B013":{"Grade":12.441666666666668,"Name":"Y Nbjwhksnam"}}
+```
+Too long to include in whole.
 ### Question 6
-Running `` on our server yields the following results:  
+Running `curl http://localhost:8090/` on our server yields the following results:  
 ```json
 
 ```
 ### Question 7
-Running `` on our server yields the following results:  
+Running `curl http://localhost:8090/` on our server yields the following results:  
 ```json
 
 ```
